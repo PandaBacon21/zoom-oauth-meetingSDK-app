@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div>
+    <h1>You have successfully authorized our app with Zoom</h1>
+
+    <h2><a href="{{ url_for('zoom_api_bp.get_user') }}">Get My Zoom Information</a></h2>
+    <h3><a href="{{ url_for('login_bp.logout') }}">Sign Out</a></h3>
+
+</div>
+{% endblock %}
