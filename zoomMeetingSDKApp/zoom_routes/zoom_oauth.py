@@ -6,10 +6,10 @@ from os import environ, path
 from datetime import datetime, timedelta
 #from dotenv import load_dotenv
 
-from flask import Blueprint, redirect, url_for, request, current_app
+from flask import Blueprint, redirect, render_template, url_for, request, current_app
 from flask_login import current_user, login_required
 #from config import basedir
-from ..models import db, Token
+from ..models import db, Users, Token
 
 
 #load_dotenv(path.join(basedir, '.env'))
@@ -28,6 +28,7 @@ ACCESS_TOKEN_URL = current_app.config['ACCESS_TOKEN_URL']
 combined_client = f'{CLIENT_ID}:{CLIENT_SECRET}'
 encoded_client = base64.b64encode(combined_client.encode()).decode()
 
+
 # Create the Blueprint for the Zoom Auth routes
 zoom_auth_bp = Blueprint(
     'zoom_auth_bp', __name__, 
@@ -44,14 +45,19 @@ Once authorized by the user, they will redirect to the /zoom-redirect URL return
 @zoom_auth_bp.route('/zoom-auth', methods=['GET'])
 @login_required
 def get_auth():
-    query_parameters = {
-        'response_type':'code',
-        'client_id': CLIENT_ID,
-        'redirect_uri': 'https://pangolin-related-mildly.ngrok-free.app/zoom-redirect'
-        }
-    full_oauth_url = f"{AUTH_URL}?response_type={query_parameters['response_type']}&client_id={query_parameters['client_id']}&redirect_uri={query_parameters['redirect_uri']}"
+    if current_user.zoom_auth:
+        return render_template('success.html', message='Bypassed Zoom code auth process')
+    else:
+        query_parameters = {
+            'response_type':'code',
+            'client_id': CLIENT_ID,
+            'redirect_uri': 'https://pangolin-related-mildly.ngrok-free.app/zoom-redirect'
+            }
+        full_oauth_url = f"{AUTH_URL}?response_type={query_parameters['response_type']}&client_id={query_parameters['client_id']}&redirect_uri={query_parameters['redirect_uri']}"
+        
+        return redirect(full_oauth_url)
 
-    return redirect(full_oauth_url)
+
 
 
 '''
@@ -85,9 +91,8 @@ token if we have not received one as it nears the 90 day mark.
 @zoom_auth_bp.route('/zoom-redirect', methods=['GET', 'POST'])
 @login_required
 def zoom_redirect():
-    auth_code = request.args
-    if auth_code['code']:
-        auth_code = auth_code['code']
+    if 'code' in request.args:
+        auth_code = request.args.get('code')
         resp = request_token(auth_code, encoded_client)
         r = json.loads(resp)
 
@@ -103,7 +108,13 @@ def zoom_redirect():
             refresh_expires=refresh_expires,
             user_id=current_user.id
         )
+
         db.session.add(zoom_token)
+        db.session.flush()
+
+        user = db.session.query(Users).filter_by(id=current_user.id).first()
+        user.zoom_auth = True
+
         db.session.commit()
 
         return redirect(url_for('main_routes.success'))
@@ -113,13 +124,14 @@ This function checks if the token is valid or if it has expired. If it has expir
 There still seems to be an issue where it is creating duplicate token records rather than replacing the old token when expired, however. Need to fix that.
 '''
 
-def check_token_expiry(token):
+def check_token_expiry():
+    token = db.session.query(Token).filter_by(user_id=current_user.id).first()
     if token.access_expires > datetime.now():
         print('token is still valid')
         return token
     else: 
         print('Token expired. Retrieving new token')
-        refresh_token = token['refresh_token']
+        refresh_token = token.refresh_token
         headers = {
             'Authorization': f'Basic {encoded_client}',
             'Content-Type': 'application/x-www-form-urlencoded'

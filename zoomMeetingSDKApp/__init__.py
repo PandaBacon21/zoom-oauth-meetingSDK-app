@@ -19,9 +19,9 @@ def create_app(config_class=Config):
     with app.app_context(): 
         
         from .zoom_routes import zoom_oauth, zoom_apis
-        from .user_login import login
+        from .login_routes import login
         from .main_routes import main_routes
-        from . import models
+        #from . import models
 
         #db.drop_all()
         db.create_all()

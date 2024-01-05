@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template
-from ..user_login.login import login_required, current_user
+from flask_login import login_required, current_user
 
 from ..models import db, Users, Token
 
@@ -16,6 +16,7 @@ main_bp = Blueprint(
 @main_bp.route('/', methods=['GET'])
 def home():
     return render_template('home.html', title='Welcome to this Zoom Meeting SDK App')
+
 
 
 @main_bp.route('/success', methods=['GET'])

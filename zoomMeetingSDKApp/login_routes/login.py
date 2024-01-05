@@ -15,7 +15,7 @@ login_bp = Blueprint(
 def signup():
     form = SignupForm()
     if form.validate_on_submit():
-        existing_user = Users.query.filter_by(email=form.email.data).first()
+        existing_user = db.session.query(Users).filter_by(email=form.email.data).first()
         if existing_user is None:
             user = Users(
             first_name=form.first_name.data,
@@ -39,11 +39,11 @@ def login():
     
     form = LoginForm()
     if form.validate_on_submit():
-        user = Users.query.filter_by(email=form.email.data).first()
+        user = db.session.query(Users).filter_by(email=form.email.data).first()
         if user and user.check_password(password=form.password.data):
             login_user(user)
             next_page = request.args.get('next')
-            return redirect(next_page or url_for('main_routes.home'))
+            return redirect(next_page or url_for('zoom_auth_bp.get_auth'))
         flash('Invalid username/password combination')
     return render_template('login.html', title='Log In', form=form)
 
@@ -60,7 +60,7 @@ def logout():
 @login_manager.user_loader
 def load_user(user_id):
     if user_id is not None:
-        return Users.query.get(user_id)
+        return db.session.get(Users, user_id)
     return None
 
 

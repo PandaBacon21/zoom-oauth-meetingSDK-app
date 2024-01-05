@@ -25,6 +25,7 @@ class Users(UserMixin, db.Model):
     last_name = db.Column(db.String(50), unique=False, nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), unique=False, nullable=False)
+    zoom_auth = db.Column(db.Boolean, default=False, nullable=False)
     token_id = db.relationship('Token', uselist=False, backref='users_id')
 
     def set_password(self, password):
@@ -32,7 +33,7 @@ class Users(UserMixin, db.Model):
         self.password_hash = generate_password_hash(password)
 
     def check_password(self, password):
-        return check_password_hash(self.password, password)
+        return check_password_hash(self.password_hash, password)
     
     def __repr__(self):
         return f'User {self.first_name} {self.last_name}'

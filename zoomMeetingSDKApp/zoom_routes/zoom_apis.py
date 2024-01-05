@@ -21,10 +21,10 @@ zoom_api_bp = Blueprint(
 @login_required
 def get_user():
     endpoint = f'{ZOOM_API_URL}/users/me'
-    token = Token.query.filter_by(user_id=current_user.id).first()
-    access_token = check_token_expiry(token)
+    #token = db.session.query(Token).filter_by(user_id=current_user.id).first()
+    verified_token = check_token_expiry()
     headers = {
-        'Authorization': f"Bearer {access_token.access_token}"
+        'Authorization': f"Bearer {verified_token.access_token}"
     }
     resp = requests.get(f'{endpoint}', headers=headers)
     r = json.loads(resp.content)
