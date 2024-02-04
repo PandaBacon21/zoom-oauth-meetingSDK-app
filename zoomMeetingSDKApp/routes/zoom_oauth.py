@@ -13,6 +13,9 @@ from ..models import db, Users, Token
 
 CLIENT_ID = current_app.config['CLIENT_ID']
 CLIENT_SECRET = current_app.config['CLIENT_SECRET']
+# print(CLIENT_ID, CLIENT_SECRET)
+
+
 AUTH_URL = current_app.config['AUTH_URL']
 ACCESS_TOKEN_URL = current_app.config['ACCESS_TOKEN_URL']
 ZOOM_API_URL = current_app.config['ZOOM_API_URL']
@@ -21,10 +24,11 @@ combined_client = f'{CLIENT_ID}:{CLIENT_SECRET}'
 encoded_client = base64.b64encode(combined_client.encode()).decode()
 
 
+
+
 # Create the Blueprint for the Zoom Auth routes
 zoom_auth_bp = Blueprint(
     'zoom_auth_bp', __name__)
-
 
 
 def get_zoom_auth():
@@ -46,6 +50,7 @@ def request_token():
         'Authorization': f'Basic {encoded_client}',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
+    # print(f'Auth Code: {auth_code}')
     request_body = {
         'code': auth_code,
         'grant_type': 'authorization_code',
@@ -54,6 +59,7 @@ def request_token():
     response = requests.post(f'{ACCESS_TOKEN_URL}', params=request_body, headers=headers)
     # return response.content
     r = json.loads(response.content)
+    # print(r)
     access_token = r['access_token']
     refresh_token = r['refresh_token']
     access_expires = datetime.now() + timedelta(seconds=int(r['expires_in']))
@@ -112,38 +118,39 @@ def check_token_expiry(id):
         return token.access_token
 
 
-# def generate_signature(meeting_number):
-#     iat = datetime.now(timezone.utc)
-#     exp = iat + timedelta(seconds=1800)
+def generate_signature(meeting_number):
+    iat = datetime.now(timezone.utc)
+    exp = iat + timedelta(seconds=1800)
     
-#     #headers = {
-#     #    'alg': 'HS256', 
-#     #    'typ': 'JWT'
-#     #}
+    #headers = {
+    #    'alg': 'HS256', 
+    #    'typ': 'JWT'
+    #}
 
-#     payload = {
-#         "appKey": current_app.config['CLIENT_ID'],
-#         "sdkKey": current_app.config['CLIENT_ID'],
-#         "mn": meeting_number,
-#         "role": 1,
-#         "iat": round(iat.timestamp()),
-#         "exp": round(exp.timestamp()),
-#         "tokenExp": round(exp.timestamp())
-#     }
-#     jwtoken = jwt.encode(payload, CLIENT_SECRET, algorithm='HS256')
+    payload = {
+        "appKey": current_app.config['CLIENT_ID'],
+        "sdkKey": current_app.config['CLIENT_ID'],
+        "mn": meeting_number,
+        "role": 1,
+        "iat": round(iat.timestamp()),
+        "exp": round(exp.timestamp()),
+        "tokenExp": round(exp.timestamp())
+    }
+    jwtoken = jwt.encode(payload, CLIENT_SECRET, algorithm='HS256')
 
-#     return jwtoken
+    return jwtoken
 
-# def get_zak():
-#     full_url = f'{ZOOM_API_URL}/users/me/token?type=zak'
-#     access_token = check_token_expiry()
-#     headers = {
-#         'Authorization': f'Bearer {access_token}'
-#     }
-#     response = requests.get(full_url, headers=headers)
-#     r = json.loads(response.content)
-#     zak = r['token']
-#     return zak
+def get_zak(user_id):
+    full_url = f'{ZOOM_API_URL}/users/me/token?type=zak'
+    current_user = db.session.query(Users).filter_by(id=user_id).first()
+    access_token = check_token_expiry(current_user.id)
+    headers = {
+        'Authorization': f'Bearer {access_token}'
+    }
+    response = requests.get(full_url, headers=headers)
+    r = json.loads(response.content)
+    zak = r['token']
+    return zak
 
 
 

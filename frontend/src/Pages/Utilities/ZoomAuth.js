@@ -25,6 +25,7 @@ const ZoomAuth = (token, zoomAuthCode) => {
           console.log(error.response.status);
           console.log(error.response.headers);
         }
+        navigate("/dashboard");
       });
   }, [navigate, token, zoomAuthCode]);
 };
