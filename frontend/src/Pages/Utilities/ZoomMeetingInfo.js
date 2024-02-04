@@ -27,21 +27,23 @@ const ZoomMeetingInfo = (props) => {
     })
       .then((response) => {
         const res = response.data;
-        setMeetingCredentials((meetingCredentials) => ({
-          ...meetingCredentials,
-          meetingTopic: res.meeting_topic,
-          meetingNumber: res.meeting_number,
-          sdkKey: res.sdkKey,
-          signature: res.signature,
-          passWord: res.password,
-          role: res.role,
-          userName: res.username,
-          userEmail: res.user_email,
-          zakToken: res.zak,
-        }));
-        console.log(meetingCredentials);
         console.log(res);
+        setMeetingCredentials((meetingCredentials) => {
+          return {
+            ...meetingCredentials,
+            meetingTopic: res["meeting_topic"],
+            meetingNumber: res["meeting_number"],
+            sdkKey: res["sdkKey"],
+            signature: res["signature"],
+            passWord: res["password"],
+            role: res["role"],
+            userName: res["username"],
+            userEmail: res["user_email"],
+            zakToken: res["zak"],
+          };
+        });
         setHasMeeting(true);
+        // console.log(`Created Meeting: ${meetingCredentials.meetingNumber}`);
       })
       .catch((error) => {
         if (error.response) {
@@ -53,43 +55,53 @@ const ZoomMeetingInfo = (props) => {
   }
 
   function startMeeting(meetingCredentials) {
+    console.log(meetingCredentials.meetingNumber);
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareWebSDK();
+
+    ZoomMtg.i18n.load("en-US");
+
     document.getElementById("zmmtg-root").style.display = "block";
 
-    ZoomMtg.init({
-      leaveUrl: meetingCredentials.leaveUrl,
-      patchJsMedia: true,
-      success: (success) => {
-        console.log(success);
-        console.log(`meetingNumber: ${meetingCredentials.meetingNumber}`);
-        console.log(`sdkKey: ${meetingCredentials.sdkKey}`);
-        console.log(`signature: ${meetingCredentials.signature}`);
-        console.log(`passWord: ${meetingCredentials.passWord}`);
-        console.log(`userName: ${meetingCredentials.userName}`);
-        console.log(`userEmail: ${meetingCredentials.userEmail}`);
-        console.log(`zakToken: ${meetingCredentials.zakToken}`);
+    ZoomMtg.init(
+      {
+        leaveUrl: meetingCredentials.leaveUrl,
+        patchJsMedia: true,
+        success: (success) => {
+          console.log(success);
+          console.log(`meetingNumber: ${meetingCredentials.meetingNumber}`);
+          console.log(`sdkKey: ${meetingCredentials.sdkKey}`);
+          console.log(`signature: ${meetingCredentials.signature}`);
+          console.log(`passWord: ${meetingCredentials.passWord}`);
+          console.log(`userName: ${meetingCredentials.userName}`);
+          console.log(`userEmail: ${meetingCredentials.userEmail}`);
+          console.log(`zakToken: ${meetingCredentials.zakToken}`);
 
-        ZoomMtg.join({
-          meetingNumber: meetingCredentials.meetingNumber,
-          sdkKey: meetingCredentials.sdkKey,
-          signature: meetingCredentials.signature,
-          passWord: meetingCredentials.passWord,
-          userName: meetingCredentials.userName,
-          userEmail: meetingCredentials.userEmail,
-          zak: meetingCredentials.zakToken,
-          success: (success) => {
-            console.log(success);
-          },
-          error: (error) => {
-            console.log(error);
-          },
-        });
+          ZoomMtg.join({
+            meetingNumber: meetingCredentials.meetingNumber,
+            sdkKey: meetingCredentials.sdkKey,
+            signature: meetingCredentials.signature,
+            passWord: meetingCredentials.passWord,
+            userName: meetingCredentials.userName,
+            userEmail: meetingCredentials.userEmail,
+            zak: meetingCredentials.zakToken,
+            success: (success) => {
+              console.log(success);
+            },
+            error: (error) => {
+              console.log(error);
+            },
+          });
+        },
+        error: (error) => {
+          console.log(error);
+        },
       },
-      error: (error) => {
-        console.log(error);
-      },
-    });
+      [meetingCredentials]
+    );
+  }
+  function handleStartMeeting() {
+    startMeeting(meetingCredentials);
   }
 
   return (
@@ -114,7 +126,7 @@ const ZoomMeetingInfo = (props) => {
                   <button
                     type="button"
                     className="btn btn-primary btn-lg m-2"
-                    onClick={startMeeting}
+                    onClick={handleStartMeeting}
                   >
                     Start Meeting
                   </button>
