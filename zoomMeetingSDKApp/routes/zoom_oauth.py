@@ -13,8 +13,6 @@ from ..models import db, Users, Token
 
 CLIENT_ID = current_app.config['CLIENT_ID']
 CLIENT_SECRET = current_app.config['CLIENT_SECRET']
-# print(CLIENT_ID, CLIENT_SECRET)
-
 
 AUTH_URL = current_app.config['AUTH_URL']
 ACCESS_TOKEN_URL = current_app.config['ACCESS_TOKEN_URL']
@@ -24,9 +22,6 @@ combined_client = f'{CLIENT_ID}:{CLIENT_SECRET}'
 encoded_client = base64.b64encode(combined_client.encode()).decode()
 
 
-
-
-# Create the Blueprint for the Zoom Auth routes
 zoom_auth_bp = Blueprint(
     'zoom_auth_bp', __name__)
 
@@ -50,16 +45,13 @@ def request_token():
         'Authorization': f'Basic {encoded_client}',
         'Content-Type': 'application/x-www-form-urlencoded'
     }
-    # print(f'Auth Code: {auth_code}')
     request_body = {
         'code': auth_code,
         'grant_type': 'authorization_code',
         'redirect_uri': 'http://localhost:3000/dashboard/zoom-redirect', 
     }
     response = requests.post(f'{ACCESS_TOKEN_URL}', params=request_body, headers=headers)
-    # return response.content
     r = json.loads(response.content)
-    # print(r)
     access_token = r['access_token']
     refresh_token = r['refresh_token']
     access_expires = datetime.now() + timedelta(seconds=int(r['expires_in']))
@@ -73,10 +65,8 @@ def request_token():
             refresh_expires=refresh_expires,
             user_id=current_user.id
         )
-
     db.session.add(zoom_token)
     db.session.flush()
-    
     current_user.zoom_auth = True
     db.session.commit()
     print('Zoom access token retrieved')
@@ -122,11 +112,6 @@ def generate_signature(meeting_number):
     iat = datetime.now(timezone.utc)
     exp = iat + timedelta(seconds=1800)
     
-    #headers = {
-    #    'alg': 'HS256', 
-    #    'typ': 'JWT'
-    #}
-
     payload = {
         "appKey": current_app.config['CLIENT_ID'],
         "sdkKey": current_app.config['CLIENT_ID'],
@@ -139,6 +124,7 @@ def generate_signature(meeting_number):
     jwtoken = jwt.encode(payload, CLIENT_SECRET, algorithm='HS256')
 
     return jwtoken
+
 
 def get_zak(user_id):
     full_url = f'{ZOOM_API_URL}/users/me/token?type=zak'
@@ -153,33 +139,3 @@ def get_zak(user_id):
     return zak
 
 
-
-# @zoom_auth_bp.route('/zoom-redirect', methods=['GET', 'POST'])
-# def zoom_redirect():
-#     if 'code' in request.args:
-#         auth_code = request.args.get('code')
-#         resp = request_token(auth_code, encoded_client)
-#         r = json.loads(resp)
-
-#         access_token = r['access_token']
-#         refresh_token = r['refresh_token']
-#         access_expires = datetime.now() + timedelta(seconds=int(r['expires_in']))
-#         refresh_expires = datetime.now() + timedelta(days=90)
-
-#         zoom_token = Token(
-#             access_token=access_token, 
-#             refresh_token=refresh_token,
-#             access_expires=access_expires,
-#             refresh_expires=refresh_expires,
-#             user_id=current_user.id
-#         )
-
-#         db.session.add(zoom_token)
-#         db.session.flush()
-
-#         user = db.session.query(Users).filter_by(id=current_user.id).first()
-#         user.zoom_auth = True
-
-#         db.session.commit()
-
-#         return redirect(url_for('main_routes.success'))

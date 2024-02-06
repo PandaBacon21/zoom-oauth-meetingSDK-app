@@ -3,7 +3,7 @@ import axios from "axios";
 
 import { ZoomMtg } from "@zoom/meetingsdk";
 
-const ZoomMeetingInfo = (props) => {
+function ZoomMeetingInfo({ token }) {
   const [hasMeeting, setHasMeeting] = useState(false);
   const [meetingCredentials, setMeetingCredentials] = useState({
     meetingNumber: 0,
@@ -17,33 +17,30 @@ const ZoomMeetingInfo = (props) => {
     leaveUrl: "http://localhost:3000/dashboard",
   });
 
-  function handleCreateMeeting() {
+  const handleCreateMeeting = () => {
     axios({
       method: "POST",
       url: "/api/zoom/create-meeting",
       headers: {
-        Authorization: `Bearer ${props.token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
         const res = response.data;
-        console.log(res);
-        setMeetingCredentials((meetingCredentials) => {
-          return {
-            ...meetingCredentials,
-            meetingTopic: res["meeting_topic"],
-            meetingNumber: res["meeting_number"],
-            sdkKey: res["sdkKey"],
-            signature: res["signature"],
-            passWord: res["password"],
-            role: res["role"],
-            userName: res["username"],
-            userEmail: res["user_email"],
-            zakToken: res["zak"],
-          };
+        console.log(`Meeting Created: ${res["meeting_number"]}`);
+        setMeetingCredentials({
+          ...meetingCredentials,
+          meetingTopic: res["meeting_topic"],
+          meetingNumber: res["meeting_number"],
+          sdkKey: res["sdkKey"],
+          signature: res["signature"],
+          passWord: res["password"],
+          role: res["role"],
+          userName: res["username"],
+          userEmail: res["user_email"],
+          zakToken: res["zak"],
         });
         setHasMeeting(true);
-        // console.log(`Created Meeting: ${meetingCredentials.meetingNumber}`);
       })
       .catch((error) => {
         if (error.response) {
@@ -52,10 +49,9 @@ const ZoomMeetingInfo = (props) => {
           console.log(error.response.headers);
         }
       });
-  }
+  };
 
-  function startMeeting(meetingCredentials) {
-    console.log(meetingCredentials.meetingNumber);
+  const startMeeting = (meetingCredentials) => {
     ZoomMtg.preLoadWasm();
     ZoomMtg.prepareWebSDK();
 
@@ -63,46 +59,37 @@ const ZoomMeetingInfo = (props) => {
 
     document.getElementById("zmmtg-root").style.display = "block";
 
-    ZoomMtg.init(
-      {
-        leaveUrl: meetingCredentials.leaveUrl,
-        patchJsMedia: true,
-        success: (success) => {
-          console.log(success);
-          console.log(`meetingNumber: ${meetingCredentials.meetingNumber}`);
-          console.log(`sdkKey: ${meetingCredentials.sdkKey}`);
-          console.log(`signature: ${meetingCredentials.signature}`);
-          console.log(`passWord: ${meetingCredentials.passWord}`);
-          console.log(`userName: ${meetingCredentials.userName}`);
-          console.log(`userEmail: ${meetingCredentials.userEmail}`);
-          console.log(`zakToken: ${meetingCredentials.zakToken}`);
+    ZoomMtg.init({
+      leaveUrl: meetingCredentials.leaveUrl,
+      patchJsMedia: true,
+      success: (success) => {
+        console.log(success);
 
-          ZoomMtg.join({
-            meetingNumber: meetingCredentials.meetingNumber,
-            sdkKey: meetingCredentials.sdkKey,
-            signature: meetingCredentials.signature,
-            passWord: meetingCredentials.passWord,
-            userName: meetingCredentials.userName,
-            userEmail: meetingCredentials.userEmail,
-            zak: meetingCredentials.zakToken,
-            success: (success) => {
-              console.log(success);
-            },
-            error: (error) => {
-              console.log(error);
-            },
-          });
-        },
-        error: (error) => {
-          console.log(error);
-        },
+        ZoomMtg.join({
+          meetingNumber: meetingCredentials.meetingNumber,
+          sdkKey: meetingCredentials.sdkKey,
+          signature: meetingCredentials.signature,
+          passWord: meetingCredentials.passWord,
+          userName: meetingCredentials.userName,
+          userEmail: meetingCredentials.userEmail,
+          zak: meetingCredentials.zakToken,
+          success: (success) => {
+            console.log(success);
+          },
+          error: (error) => {
+            console.log(error);
+          },
+        });
       },
-      [meetingCredentials]
-    );
-  }
-  function handleStartMeeting() {
+      error: (error) => {
+        console.log(error);
+      },
+    });
+  };
+
+  const handleStartMeeting = () => {
     startMeeting(meetingCredentials);
-  }
+  };
 
   return (
     <div className="col-md-2 col-lg-6">
@@ -138,6 +125,21 @@ const ZoomMeetingInfo = (props) => {
       </div>
     </div>
   );
-};
+}
 
 export default ZoomMeetingInfo;
+
+// setMeetingCredentials((meetingCredentials) => {
+//   return {
+//     ...meetingCredentials,
+//     meetingTopic: res["meeting_topic"],
+//     meetingNumber: res["meeting_number"],
+//     sdkKey: res["sdkKey"],
+//     signature: res["signature"],
+//     passWord: res["password"],
+//     role: res["role"],
+//     userName: res["username"],
+//     userEmail: res["user_email"],
+//     zakToken: res["zak"],
+//   };
+// });

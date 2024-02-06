@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "./Utilities/NavBar";
 import ZoomInfo from "./Utilities/ZoomInfo";
 
-const Dashboard = (props) => {
+const Dashboard = ({ token, setToken, removeToken }) => {
   const navigate = useNavigate();
 
   const [userData, setUserData] = useState("");
@@ -18,12 +18,12 @@ const Dashboard = (props) => {
         method: "GET",
         url: "/api/dashboard",
         headers: {
-          Authorization: `Bearer ${props.token}`,
+          Authorization: `Bearer ${token}`,
         },
       })
         .then((response) => {
           const res = response.data;
-          res.access_token && props.setToken(res.access_token);
+          res.access_token && setToken(res.access_token);
           setUserData({
             first_name: res.first_name,
             last_name: res.last_name,
@@ -49,11 +49,11 @@ const Dashboard = (props) => {
     return () => {
       ignore = true;
     };
-  }, [props, navigate]);
+  }, [token, setToken, navigate]);
 
   return (
     <div className="vh-100" style={{ backgroundColor: "#eee" }}>
-      <NavBar removeToken={props.removeToken} />
+      <NavBar removeToken={removeToken} />
       <div className="container h-100">
         <div className="row d-flex justify-content-center align-items-center h-50">
           <div className="col-md-8 col-md-8">
@@ -85,7 +85,7 @@ const Dashboard = (props) => {
           </div>
         </div>
         {userData.zoom_authorized ? (
-          <ZoomInfo token={props.token} setToken={props.setToken} />
+          <ZoomInfo token={token} setToken={setToken} />
         ) : null}
       </div>
     </div>

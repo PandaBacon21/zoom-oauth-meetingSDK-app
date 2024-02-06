@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -22,7 +22,7 @@ const NavBar = (props) => {
 
   return (
     <nav className="navbar navbar-light bg-light">
-      <a className="navbar-brand" href="/">
+      <a className="navbar-brand" href="/dashboard">
         <img
           src="logo192.png"
           width="30"

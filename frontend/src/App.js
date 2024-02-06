@@ -5,6 +5,7 @@ import Register from "./Pages/Register";
 import Dashboard from "./Pages/Dashboard";
 import useToken from "./Pages/Utilities/UseToken";
 import ZoomRedirect from "./Pages/ZoomRedirect";
+import PrivateRoutes from "./Pages/Utilities/PrivateRoutes";
 
 function App() {
   const { token, removeToken, setToken } = useToken();
@@ -17,20 +18,23 @@ function App() {
       />
       <Route path="/login" element={<Login setToken={setToken} />} />
       <Route path="/register" element={<Register setToken={setToken} />} />
-      <Route
-        path="/dashboard"
-        element={
-          <Dashboard
-            token={token}
-            setToken={setToken}
-            removeToken={removeToken}
-          />
-        }
-      />
-      <Route
-        path="/dashboard/zoom-redirect"
-        element={<ZoomRedirect token={token} />}
-      />
+      {/* Protected Routes. Must be Authenticated */}
+      <Route element={<PrivateRoutes token={token} />}>
+        <Route
+          path="/dashboard"
+          element={
+            <Dashboard
+              token={token}
+              setToken={setToken}
+              removeToken={removeToken}
+            />
+          }
+        />
+        <Route
+          path="/dashboard/zoom-redirect"
+          element={<ZoomRedirect token={token} />}
+        />
+      </Route>
     </Routes>
   );
 }

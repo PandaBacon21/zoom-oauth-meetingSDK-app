@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Login = (props) => {
+function Login({ setToken }) {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  function logInUser(event) {
+  const logInUser = (event) => {
     if (email.length === 0) {
       alert("Email cannot be left blank!");
     } else if (password.length === 0) {
@@ -20,7 +20,7 @@ const Login = (props) => {
           password: password,
         })
         .then((response) => {
-          props.setToken(response.data.access_token);
+          setToken(response.data.access_token);
           if (response.status === 200) {
             navigate("/dashboard");
           }
@@ -39,7 +39,7 @@ const Login = (props) => {
 
       event.preventDefault();
     }
-  }
+  };
 
   return (
     <div className="vh-100" style={{ backgroundColor: "#eee" }}>
@@ -114,6 +114,6 @@ const Login = (props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Login;

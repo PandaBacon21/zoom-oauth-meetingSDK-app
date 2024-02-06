@@ -2,12 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import NavBar from "./Utilities/NavBar";
 
-const Home = (props) => {
+function Home({ token, removeToken }) {
   const navigate = useNavigate();
 
   return (
     <div className="vh-100" style={{ backgroundColor: "#eee" }}>
-      {props.token ? <NavBar removeToken={props.removeToken} /> : null}
+      {token ? <NavBar removeToken={removeToken} /> : null}
       <div className="container h-100">
         <div className="row d-flex justify-content-center align-items-center h-100">
           <div className="col-lg-12 col-xl-11">
@@ -50,6 +50,6 @@ const Home = (props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Home;

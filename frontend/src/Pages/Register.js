@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Register = (props) => {
+function Register({ setToken }) {
   const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState("");
@@ -11,7 +11,7 @@ const Register = (props) => {
   const [password, setPassword] = useState("");
   const [passwordToCheck, setPasswordToCheck] = useState("");
 
-  function registerUser(event) {
+  const registerUser = (event) => {
     if (firstName.length === 0) {
       alert("First Name cannot be left blank!");
     } else if (lastName.length === 0) {
@@ -31,7 +31,7 @@ const Register = (props) => {
           password: password,
         })
         .then((response) => {
-          props.setToken(response.data.access_token);
+          setToken(response.data.access_token);
           if (response.status === 200) {
             navigate("/dashboard");
           }
@@ -52,7 +52,7 @@ const Register = (props) => {
 
       event.preventDefault();
     }
-  }
+  };
 
   return (
     <div className="vh-100" style={{ backgroundColor: "#eee" }}>
@@ -174,6 +174,6 @@ const Register = (props) => {
       </div>
     </div>
   );
-};
+}
 
 export default Register;

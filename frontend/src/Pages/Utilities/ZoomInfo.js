@@ -2,31 +2,31 @@ import React, { useState } from "react";
 import axios from "axios";
 import ZoomMeetingInfo from "./ZoomMeetingInfo";
 
-const ZoomInfo = (props) => {
-  const [showButton, setShowButton] = useState(true);
-
+function ZoomInfo({ token, setToken }) {
   const [zoomData, setZoomData] = useState({
     accountId: "",
     displayName: "",
     email: "",
   });
 
-  function getZoomInfo() {
+  const getZoomInfo = () => {
     axios({
       method: "GET",
       url: "/api/zoom/me",
       headers: {
-        Authorization: `Bearer ${props.token}`,
+        Authorization: `Bearer ${token}`,
       },
     })
       .then((response) => {
         const res = response.data;
-        res.access_token && props.setToken(res.access_token);
-        zoomData.accountId = res["account_id"];
-        zoomData.displayName = res["display_name"];
-        zoomData.email = res["email"];
-        setZoomData({ ...zoomData });
-        console.log("Zoom Account ID:" + zoomData.accountId);
+        res.access_token && setToken(res.access_token);
+        setZoomData({
+          ...zoomData,
+          accountId: res["account_id"],
+          displayName: res["display_name"],
+          email: res["email"],
+        });
+        console.log("Zoom Account ID: " + res.account_id);
       })
       .catch((error) => {
         if (error.response) {
@@ -35,11 +35,11 @@ const ZoomInfo = (props) => {
           console.log(error.response.headers);
         }
       });
-  }
+  };
 
-  function toggleButton() {
-    setShowButton(!showButton);
-  }
+  const handleGetZoomInfo = () => {
+    getZoomInfo();
+  };
 
   return (
     <>
@@ -51,39 +51,31 @@ const ZoomInfo = (props) => {
                 <div className="col-md-10 col-lg-7 col-xl-8 order-2 order-lg-1 text-center">
                   <h1>Zoom Account Information</h1>
                   <div className="text-center">
-                    {showButton && (
-                      <button
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={() => {
-                          getZoomInfo();
-                          toggleButton();
-                        }}
-                      >
-                        Get Zoom Account Info
-                      </button>
-                    )}
                     {zoomData.accountId !== "" ? (
                       <ul>
                         <li>Zoom Id: {zoomData.accountId}</li>
                         <li>Zoom Display Name: {zoomData.displayName}</li>
                         <li>Zoom Email: {zoomData.email}</li>
                       </ul>
-                    ) : null}
+                    ) : (
+                      <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={handleGetZoomInfo}
+                      >
+                        Get Zoom Account Info
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {zoomData.accountId !== "" ? (
-          <ZoomMeetingInfo token={props.token} />
-        ) : null}
+        {zoomData.accountId !== "" ? <ZoomMeetingInfo token={token} /> : null}
       </div>
     </>
   );
-};
+}
 
 export default ZoomInfo;
-
-/* <div className="col-lg-12 col-xl-11"> */

@@ -74,28 +74,6 @@ def create_meeting():
             'zak': zak
             }
 
-# @zoom_api_bp.route('/start-meeting/<meeting_number>', methods=['POST'])
-# @jwt_required()
-# def start_meeting(meeting_number):
-#     current_user = db.session.query(Users).filter_by(email=get_jwt_identity()).first()
-#     meeting = db.session.query(Meetings).filter_by(meeting_number=meeting_number).first()
-#     sdk_jwt = generate_signature(meeting_number)
-#     zak = get_zak(current_user.id)
-#     username = f'{current_user.first_name} {current_user.last_name}'
-#     password = ''
-#     if meeting.if_password(): 
-#         password = meeting.meeting_password
-    
-#     payload = {
-#         'sdkKey': current_app.config['CLIENT_ID'],
-#         'signature': sdk_jwt,
-#         'meetingNumber': meeting.meeting_number,
-#         'password': password,
-#         'userName': username,
-#         'zak': zak
-#     }
-
-#     return json.dumps(payload)
 
 
 

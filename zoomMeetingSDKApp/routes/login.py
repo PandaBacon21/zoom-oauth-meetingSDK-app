@@ -82,7 +82,7 @@ def refresh_expiring_jwt(response):
 def logout(): 
     response = jsonify({'msg': 'logout successful'})
     unset_jwt_cookies(response)
-    print('token deleted')
+    print('Session token deleted')
     return response
 
 
