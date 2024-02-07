@@ -1,6 +1,21 @@
-This is a sample app using Zoom's OAuth and Meeting SDK app types. 
+# Sample Zoom OAuth and Web SDK App
 
-The purpose of this app is to demonstrate how to allow users to sign up for your service, and then allow them to authorize this App to leverage Zoom's API on your behalf. 
-You will then be able to schedule and create Zoom meetings through the app. 
+This app is intended to serve as an example of how you can build integrations with Zoom. This app uses Zoom's APIs and the Web SDK. The front end is built with React 18.2.0 and the back end with Flask 3.0. 
 
-Once complete, I will then begin working to include the meetingSDK so that you can actually launch and conduct your meetings from within the browser rather than redirecting to the Zoom client. 
+ 
+# Zoom Info
+
+- Create a new OAuth app in your Zoom account - https://developers.zoom.us/docs/integrations/
+- Zoom API Documentation - https://developers.zoom.us/docs/api/
+- Zoom Meeting SDK - https://marketplacefront.zoom.us/sdk/meeting/web/index.html
+
+# Installation 
+Clone this project 
+```
+git clone https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app.git
+```
+
+Install Backend Dependencies
+```
+pip install -r requirements.txt 
+```
