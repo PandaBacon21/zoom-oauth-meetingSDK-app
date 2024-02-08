@@ -2,12 +2,42 @@
 
 This app is intended to serve as an example of how you can build integrations with Zoom. This app uses Zoom's APIs and the Web SDK. The front end is built with React 18.2.0 and the back end with Flask 3.0. 
 
- 
+This app represents an example flow, where a customer can register an account with your application, or log in with a previously registered account.
+Once registered and logged into the app, you will initiate the Zoom authorization process by clicking the button on a simple user dashboard. 
+![dashboard](https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/7e8801a5-1f41-47a8-b084-625ccd5438fa)
+
+When clicked, you will be redirected to the page below to authorize your app with your Zoom account. If you're not already logged into your Zoom account, you will sign in first, and then authorize the application. 
+
+![zoom-redirect](https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/d5b45d33-aabc-4bd3-8ef2-fbe6017a1e7e)
+
+After authorization, the page will redirect back to the dashboard where you will have a new section to get your account info. Clicking this will display basic account details (you can change these details that you want to send back to the frontend in ```zoom_api.py``` and then you will need to also update the ```ZoomInfo.js``` file to handle the updated data). This will also then populate a new section to allow you to create a meeting. 
+
+![zoom-acct-info](https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/cf686279-3422-4e5e-b2bc-a544fc9725a0)
+
+Upon clicking the Create Meeting button, it will display the meeting title (currently just a hard-coded title) as well as the meeting number. The button will then change to say Start Meeting. 
+
+Upon clicking Start Meeting, it will then initiate a Zoom meeting in the browser via the Zoom Meeting SDK. 
+
+![zoom-meeting](https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/690d4764-c83f-456a-8e91-00409de0393e)
+
+
 # Zoom Info
 
-- Create a new OAuth app in your Zoom account - https://developers.zoom.us/docs/integrations/
 - Zoom API Documentation - https://developers.zoom.us/docs/api/
 - Zoom Meeting SDK - https://marketplacefront.zoom.us/sdk/meeting/web/index.html
+- Create a new OAuth app in your Zoom account - https://developers.zoom.us/docs/integrations/
+  - Scopes required:
+    - account:read:admin
+    - user:read:admin
+    - meeting:read:admin
+    - meeting:write:admin
+
+Other scopes can be added if you intend to customize this further. 
+
+Add the redirect URL to your app's basic information section, and take note of the Client ID and Client Secret, as you will use those in configuring the app.
+
+![zoom-app-basic-info](https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/a59163df-49f7-4e12-8ac9-01f163ae34eb)
+
 
 # Installation 
 Clone this project 
@@ -76,6 +106,8 @@ Open a second terminal and use:
 ```
 npm start
 ```
-
 The React frontend will run on localhost:3000 by default. After ```npm start```, if the browser does not open automatically, open your browser and navigate to http://localhost:3000. 
 
+# License
+
+This app is intended as an example, and is not intended to be cloned for any production purposes. Use of Zoom's API and SDK is subject to [Zoom Terms of Use](https://explore.zoom.us/en/legal/zoom-api-license-and-tou/)
