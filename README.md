@@ -1,6 +1,6 @@
 # Sample Zoom OAuth and Web SDK App
 
-This app is intended to serve as an example of how you can build integrations with Zoom. This app uses Zoom's APIs and the Web SDK. The front end is built with React 18.2.0 and the back end with Flask 3.0. 
+This app is intended to serve as an example of how you can build integrations with Zoom. This app uses Zoom's APIs and the Web SDK. The front end is built with React 18.2.0 and the back end with Flask 3.0 and Python 3.10.9. 
 
 This app represents an example flow, where a customer can register an account with your application, or log in with a previously registered account.
 Once registered and logged into the app, you will initiate the Zoom authorization process by clicking the button on a simple user dashboard. 
