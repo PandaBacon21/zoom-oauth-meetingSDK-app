@@ -24,7 +24,7 @@ const NavBar = (props) => {
     <nav className="navbar navbar-light bg-light">
       <a className="navbar-brand" href="/dashboard">
         <img
-          src="logo192.png"
+          src="Zoom-emblem.png"
           width="30"
           height="30"
           className="d-inline-block align-top"
