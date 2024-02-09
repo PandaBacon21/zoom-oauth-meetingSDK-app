@@ -45,12 +45,12 @@ Clone this project
 git clone https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app.git
 ```
 
-```cd``` into the top-level project directory and install the frontend dependencies
+```cd``` into the frontend directory and install the frontend dependencies
 ```
 npm install
 ```
 
-In your top project directory, create a new Python virtual environment and activate that environment. 
+In your top-level directory, create a new Python virtual environment and activate that environment. 
 
 ### Install Backend Dependencies
 ```
