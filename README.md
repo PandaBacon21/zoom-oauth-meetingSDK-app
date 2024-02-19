@@ -3,7 +3,8 @@
 This app is intended to serve as an example of how you can build integrations with Zoom. This app uses Zoom's APIs and the Web SDK. The front end is built with React 18.2.0 and the back end with Flask 3.0 and Python 3.10.9. 
 
 This app represents an example flow, where a customer can register an account with your application, or log in with a previously registered account.
-Once registered and logged into the app, you will initiate the Zoom authorization process by clicking the button on a simple user dashboard. 
+Once registered and logged into the app, you will initiate the Zoom authorization process by clicking the button on a simple user dashboard.
+
 ![dashboard](https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/7e8801a5-1f41-47a8-b084-625ccd5438fa)
 
 When clicked, you will be redirected to the page below to authorize your app with your Zoom account. If you're not already logged into your Zoom account, you will sign in first, and then authorize the application. 
@@ -29,7 +30,6 @@ Upon clicking Start Meeting, it will then initiate a Zoom meeting in the browser
   - Scopes required:
     - account:read:admin
     - user:read:admin
-    - meeting:read:admin
     - meeting:write:admin
 
 Other scopes can be added if you intend to customize this further. 
@@ -45,12 +45,12 @@ Clone this project
 git clone https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app.git
 ```
 
-```cd``` into the top-level project directory and install the frontend dependencies
+```cd``` into the frontend directory and install the frontend dependencies
 ```
 npm install
 ```
 
-In your top project directory, create a new Python virtual environment and activate that environment. 
+In your top-level directory, create a new Python virtual environment and activate that environment. 
 
 ### Install Backend Dependencies
 ```
