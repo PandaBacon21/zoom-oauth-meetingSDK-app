@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "./NavBar.css";
 
 const NavBar = (props) => {
   const navigate = useNavigate();
@@ -21,22 +22,11 @@ const NavBar = (props) => {
   }
 
   return (
-    <nav className="navbar navbar-light bg-light">
-      <a className="navbar-brand" href="/dashboard">
-        <img
-          src="Zoom-emblem.png"
-          width="30"
-          height="30"
-          className="d-inline-block align-top"
-          alt=""
-        />
-        Zoom SDK Demo App
+    <nav className="nav-bar">
+      <a href="/dashboard">
+        <img src="Zoom-emblem.png" alt="Zoom Camera" />
       </a>
-      <button
-        type="button"
-        className="btn btn-primary btn-lg m-2"
-        onClick={handleLogout}
-      >
+      <button type="button" className="btn" onClick={handleLogout}>
         Logout
       </button>
     </nav>

@@ -1,0 +1,46 @@
+.zoom-info-card-container {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 500px;
+  margin-top: 25px;
+  min-width: 400px;
+}
+.zoom-info-card {
+  width: 800px;
+  overflow: hidden;
+  border-radius: 30px;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.2);
+  margin: 20px;
+}
+.zoom-info-card-row {
+  display: flex;
+  background-color: white;
+  justify-content: space-evenly;
+}
+.zoom-info-card-content {
+  padding: 16px;
+  text-align: center;
+  background-color: white;
+  align-self: center;
+  align-items: center;
+}
+ul {
+  list-style-type: none;
+}
+.zoom-info-card-content .btn {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: white;
+  text-decoration: none;
+  border-radius: 20px;
+  border: 2px solid #2d8cff;
+  margin: 16px;
+  color: #2d8cff;
+  cursor: pointer;
+  transition-duration: 0.2s;
+}
+.zoom-info-card-content .btn:hover {
+  background-color: #2d8cff;
+  color: #fff;
+}

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "./ZoomInfo.css";
 
 import { ZoomMtg } from "@zoom/meetingsdk";
 
@@ -92,34 +93,34 @@ function ZoomMeetingInfo({ token }) {
   };
 
   return (
-    <div className="col-md-2 col-lg-6">
-      <div className="card text-black" style={{ borderRadius: "25px" }}>
-        <div className="card-body p-md-5">
-          <div className="row justify-content-center">
-            <div className="col-md-10 col-lg-7 col-xl-10 order-2 order-lg-1 text-center">
-              <h1>Zoom Meeting Information</h1>
-              {!hasMeeting ? (
-                <button
-                  type="button"
-                  className="btn btn-primary btn-lg m-2"
-                  onClick={handleCreateMeeting}
-                >
-                  Create Meeting
-                </button>
-              ) : (
+    <div className="zoom-info-card-container">
+      <div className="zoom-info-card">
+        <div className="zoom-info-card-row">
+          <div className="zoom-info-card-content">
+            <h1>Zoom Meeting Information</h1>
+            {!hasMeeting ? (
+              <button
+                type="button"
+                className="btn"
+                onClick={handleCreateMeeting}
+              >
+                Create Meeting
+              </button>
+            ) : (
+              <>
                 <ul>
                   <li>Meeting Topic {meetingCredentials.meetingTopic}</li>
                   <li>Meeting Number: {meetingCredentials.meetingNumber}</li>
-                  <button
-                    type="button"
-                    className="btn btn-primary btn-lg m-2"
-                    onClick={handleStartMeeting}
-                  >
-                    Start Meeting
-                  </button>
                 </ul>
-              )}
-            </div>
+                <button
+                  type="button"
+                  className="btn"
+                  onClick={handleStartMeeting}
+                >
+                  Start Meeting
+                </button>
+              </>
+            )}
           </div>
         </div>
       </div>

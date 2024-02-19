@@ -1,0 +1,13 @@
+#root {
+  /* background-color: #f0f0f0; */
+  background-image: linear-gradient(to top left, #f0f0f0, #2d8cff);
+  overflow: auto;
+}
+
+.App {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  /* overflow: auto; */
+}
