@@ -36,7 +36,7 @@
   align-items: center;
 }
 
-.btn {
+.dashboard-card-content .btn {
   display: inline-block;
   padding: 8px 16px;
   background-color: white;
@@ -48,7 +48,7 @@
   cursor: pointer;
   transition-duration: 0.2s;
 }
-.btn:hover {
+.dashboard-card-content .btn:hover {
   background-color: #2d8cff;
   color: #fff;
 }
