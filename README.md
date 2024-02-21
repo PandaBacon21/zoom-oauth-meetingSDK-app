@@ -5,7 +5,7 @@ This app is intended to serve as an example of how you can build integrations wi
 This app represents an example flow, where a customer can register an account with your application, or log in with a previously registered account.
 Once registered and logged into the app, you will initiate the Zoom authorization process by clicking the button on a simple user dashboard.
 
-<img width="1022" alt="Dashboard" src="https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/3f4c29ea-23dc-4ee6-8366-d006fdcadf6d">
+<img width="1022" alt="Dashboard" src="https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/6e138bc1-7e47-4c9d-9cf6-0dd2457fccd1">
 
 When clicked, you will be redirected to the page below to authorize your app with your Zoom account. If you're not already logged into your Zoom account, you will sign in first, and then authorize the application. 
 
@@ -13,7 +13,7 @@ When clicked, you will be redirected to the page below to authorize your app wit
 
 After authorization, the page will redirect back to the dashboard where you will have a new section to get your account info. Clicking this will display basic account details (you can change these details that you want to send back to the frontend in ```zoom_api.py``` and then you will need to also update the ```ZoomInfo.js``` file to handle the updated data). This will also then populate a new section to allow you to create a meeting. 
 
-<img width="1491" alt="CreateMeeting" src="https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/a9deaf39-3d88-41d1-bcce-9690ca6c71fe">
+<img width="1491" alt="CreateMeeting" src="https://github.com/PandaBacon21/zoom-oauth-meetingSDK-app/assets/98666603/0b6e9986-9046-40ec-abf8-27bb0d6c8654">
 
 Upon clicking the Create Meeting button, it will display the meeting title (currently just a hard-coded title) as well as the meeting number. The button will then change to say Start Meeting. 
 
